@@ -23,4 +23,4 @@ FUTURE ENHANCEMENTS:
 
 AUTHOR:
 Sunilkumar Kahar
-Passionate about C++, system design, and high-performance trading systems.
+(Passionate about C++, system design, and high-performance trading systems.)
