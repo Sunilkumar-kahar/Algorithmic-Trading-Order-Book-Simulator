@@ -4,6 +4,7 @@
 
 using namespace std;
 
+//defining functions(setter and getter) of order-class 
 Order::Order(int id, OrderSide side, int qty, double price) : order_id(id), side(side), og_qty(qty), qty(qty), price(price){ }
 int Order::get_order_id() const { return order_id; }
 double Order::get_price() const { return price; }
@@ -23,6 +24,9 @@ void Order::display_order(){
     cout<<"---------------------------------------------------------"<<endl;
 }
 
+
+//Placing order in order-book and if match is found than execute it
+//2nd argument is use for check if it is new order or old(coming afetr update_order())
 bool OrderBook :: place_order(Order& order, bool update){
     double price = order.get_price();
     int qty = order.get_qty();
@@ -34,6 +38,7 @@ bool OrderBook :: place_order(Order& order, bool update){
         return false;
     }
 
+    //Placing order on BUY side
     if(side == OrderSide::BUY){
         list<Order>:: iterator it;
         buy_book[price].push_back(order);
@@ -41,7 +46,7 @@ bool OrderBook :: place_order(Order& order, bool update){
         it = --buy_book[price].end();
         order_position.emplace(id, it);
     }
-    else if(side == OrderSide::SELL){
+    else if(side == OrderSide::SELL){ //Placing order on SELL side
         list<Order>:: iterator it;
         sell_book[price].push_back(order);
         total_qty[price].sell += qty;
@@ -57,12 +62,14 @@ bool OrderBook :: place_order(Order& order, bool update){
     }
     order.display_order();
 
+    //if opposite-order match with this order then execute.
     if(match_order()){
         execute_ord();
     }
     return true;
 }
 
+//check if order are ready for execution or not
 bool OrderBook:: match_order(){
 
     if(sell_book.empty() || buy_book.empty())
@@ -79,6 +86,7 @@ bool OrderBook:: match_order(){
     return false;
 }
 
+//Execute orders and do manipulation on buy_book, sell_book, total_qty, order_position
 void OrderBook:: execute_ord(){
     bool all_qty_executed = false;
     while(all_qty_executed == false){
@@ -144,6 +152,7 @@ void OrderBook:: execute_ord(){
     }
 }
 
+//use for cancel exesting order
 void OrderBook:: cancel_order(int order_id, bool update){
     unordered_map <int, list<Order>::iterator > ::iterator it = order_position.find(order_id);
     if(it == order_position.end()){
@@ -176,6 +185,7 @@ void OrderBook:: cancel_order(int order_id, bool update){
     }
 }
 
+//View order book
 void OrderBook:: view_order_book(){
     //printf("%-8s%-8s%-8s%-8s\n","Qty", "Bid", "Ask", "Qty");
     cout<<left<<setw(8)<<"Qty"<<setw(8)<<"Bid"<<setw(8)<<"Ask"<<setw(8)<<"Qty"<<endl;
@@ -208,6 +218,7 @@ void OrderBook:: view_order_book(){
     }
 }
 
+//Update not partially executed order only.
 void OrderBook:: update_order(int ord_id){
     unordered_map <int, list<Order>::iterator>:: iterator um_it = order_position.find(ord_id);
     int option = 0;

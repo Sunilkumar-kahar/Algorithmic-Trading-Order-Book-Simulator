@@ -3,6 +3,7 @@
 
 using namespace std;
 
+// Entry point: Provides a simple CLI for interacting with the order book
 int main(){
     OrderBook book;
     OrderSide side;

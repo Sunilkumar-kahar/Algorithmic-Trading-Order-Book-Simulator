@@ -6,6 +6,7 @@ using namespace std;
 
 enum class OrderSide {BUY, SELL};
 
+// Represents a single order in the order book (buy or sell)
 class Order{
     private:
         int order_id;
@@ -27,6 +28,7 @@ class Order{
         void display_order();
 };
 
+// Maintains the buy/sell order book and handles matching, updating, and cancellation
 class OrderBook{
     private:
         class Price_Qty{
